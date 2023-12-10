@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.weather.dao.UserMapper">
+
+<!--  让数据库表中的字段名与实体类中的属性名一一对应 映射  -->
+    <resultMap id="userMap" type="user">
+      <id property="userId" column="user_id"></id>
+        <result  property="userName" column="user_name"></result>
+        <result property="userPwd" column="user_pwd"></result>
+    </resultMap>
+
+    <select id="findByNameAndPwd" resultMap="userMap">
+        select * from tb_users where user_name=#{userName} and user_pwd=#{userPwd} ;
+    </select>
+
+    <insert id="addUser">
+        insert into tb_users values(null,#{userName},#{userPwd})
+    </insert>
+
+    <select id="listUser" resultMap="userMap">
+        select * from tb_users
+    </select>
+
+
+    <delete id="deleteById">
+        delete from tb_users where user_id=#{userId}
+    </delete>
+
+<!--转账-->
+
+    <!--  实体类的属性名与字段名不一致，需要使用resultMap做映射  -->
+<!--    <resultMap id="userMaps" type="user">-->
+<!--        <id property="userId" column="user_id"></id>-->
+<!--        <result property="userName" column="user_name"></result>-->
+<!--        <result property="userPwd" column="user_pwd"></result>-->
+<!--    </resultMap>-->
+
+<!--     <select id="verifyforname" resultMap="userMaps">-->
+<!--         select * from tb_user where user_name=#{forName}-->
+<!--    </select>-->
+
+
+<!--    <select id="verifytoname" resultMap="userMaps">-->
+<!--         select * from tb_user where user_name=#{toName}-->
+<!--    </select>-->
+
+<!--     <select id="verifyfornamemoney" resultMap="userMaps">-->
+<!--         select * from tb_user where user_name=#{forName} and money>=#{money}-->
+<!--    </select>-->
+
+<!--    <update id="updateforname">-->
+<!--         update tb_user-->
+<!--         set-->
+<!--            money=money-${money}-->
+<!--            where user_name=#{forName}-->
+<!--    </update>-->
+
+
+<!--    <update id="updatetoname">-->
+<!--         update tb_user-->
+<!--         set-->
+<!--            money=money+${money}-->
+<!--            where user_name=#{toName}-->
+<!--    </update>-->
+</mapper>

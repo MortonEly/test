@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>登录界面</title>
+		<script src="js/vue.js"></script>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<!-- 引入axios -->
+		<script src="./js/axios.min.js"></script>
+		<style>
+			#app{
+				width: 500px;
+				height: 300px;
+				border:1px solid deepskyblue;
+				padding: 20px 50px 20px 30px;
+				border-radius: 20px;
+				box-shadow: 5px 5px 5px deepskyblue;
+				margin: 0 auto;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<h3>用户登录</h3>
+			<el-form :model="user" status-icon ref="user" label-width="100px" class="demo-ruleForm">
+				<el-form-item label="用户名" prop="userName">
+					<el-input type="text" v-model="user.userName" autocomplete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="密码" prop="userPwd">
+					<el-input type="password" v-model="user.userPwd" autocomplete="off"></el-input>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="submitForm">提交</el-button>
+					<el-button @click="resetForm('ruleForm')">重置</el-button>
+				</el-form-item>
+			</el-form>
+			
+		
+
+		</div>
+		<script>
+			new Vue({
+				el: "#app",
+				data: {			
+					user: {
+						userId:'',
+						userName: '',
+						userPwd: '',
+					}
+				},
+				methods: {
+					
+					//登录的点击事件 访问后端 axios http://localhost:9999/user/login  携带user对象:包含用户名和密码
+					submitForm:function(){
+						//将当前的data中的user对象转换为json格式
+						// {"userId":"","userName":"admin","userPwd":"123456"}
+						var user=JSON.stringify(this.user)
+						console.log(user);//打印在前端控制台
+						axios.post("http://localhost:9999/user/login",user,{
+							headers:{
+								"Content-Type":"application/json"
+							}
+						}).then((res)=>{
+							if (res.data.code==200) {
+								this.$message('登录成功!');
+								//跳转主页
+								//setTimeout(实现内容,毫秒数)，实现隔多少秒后执行
+								setTimeout(function(){
+									location.href="4-主页.html";
+								},500)
+							} else{
+								this.$message('登录失败!');
+							}
+						})
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

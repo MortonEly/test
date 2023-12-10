@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.weather.dao.CommodityMapper">
+
+<!--  让数据库表中的字段名与实体类中的属性名一一对应 映射  -->
+    <resultMap id="commodityMap" type="commodity">
+        <id column="commodityId" property="commodityId"></id>
+        <result column="commodityName" property="commodityName"></result>
+        <result column="commodityAuthor" property="commodityAuthor"></result>
+        <result column="commodityPrice" property="commodityPrice"></result>
+        <result column="commodityDesc" property="commodityDesc"></result>
+        <result column="img" property="img"></result>
+    </resultMap>
+
+    <insert id="add">
+        insert into tb_commodity(commodityName,commodityAuthor,commodityPrice,commodityDesc,img)
+        values(#{commodityName},#{commodityAuthor},#{commodityPrice},#{commodityDesc},#{img})
+    </insert>
+
+    <select id="findAll" resultMap="commodityMap">
+        select * from tb_commodity
+    </select>
+
+</mapper>

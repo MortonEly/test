@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script src="js/vue.js"></script>
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<!-- 引入axios -->
+		<script src="./js/axios.min.js"></script>
+		<style>
+			.el-header {
+				background-color: #B3C0D1;
+				color: #333;
+				line-height: 60px;
+			}
+
+			.el-aside {
+				color: #333;
+			}
+
+			a {
+				text-decoration: none;
+				/*去除下划线*/
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<el-container style="height: 870px; border: 1px solid #eee">
+				<el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+					<el-menu :default-openeds="['1']" background-color="#545c64" text-color="#fff"
+						active-text-color="#ffd04b">
+						<el-submenu index="1">
+							<template slot="title"><i class="el-icon-message"></i>系统管理</template>
+							<el-menu-item-group>
+								
+								<a href="9-添加商品.html" target="myFrame"> <el-menu-item index="1-1">添加商品</el-menu-item></a>
+								<a href="10-查看商品列表.html" target="myFrame"> <el-menu-item index="1-2">查看商品</el-menu-item></a>
+								<!-- <el-menu-item index="1-1">	
+									<a href="9-添加商品.html">查看商品</a>
+								</el-menu-item>
+								<el-menu-item index="1-2">
+									添加商品
+									</el-menu-item> -->
+								
+							</el-menu-item-group>
+						</el-submenu>
+						<el-submenu index="2">
+							<template slot="title"><i class="el-icon-menu"></i>用户管理</template>
+							<el-menu-item-group>
+								<a href="11-注册用户.html" target="myFrame"> <el-menu-item index="2-1">添加用户</el-menu-item></a>
+								<a href="12-展示用户.html" target="myFrame"> <el-menu-item index="2-2">用户列表</el-menu-item></a>
+							</el-menu-item-group>
+						</el-submenu>
+						<el-submenu index="3">
+							<template slot="title"><i class="el-icon-setting"></i>城市管理</template>
+							<el-menu-item-group>
+								<el-menu-item index="3-1">添加城市</el-menu-item>
+								
+								<el-menu-item index="3-2">城市列表</el-menu-item>
+								
+								<!-- <el-menu-item index="3-3">天气预报</el-menu-item> -->
+								<a href="6-天气预报.html" target="myFrame"> <el-menu-item index="3-3">用户列表</el-menu-item></a>
+								<!-- <el-menu-item-group>
+									<a href="6-天气预报.html" target="myFrame"> <el-menu-item index="3-3">用户列表</el-menu-item></a>
+								</el-menu-item-group> -->
+								
+							</el-menu-item-group>
+						</el-submenu>
+					</el-menu>
+				</el-aside>
+
+				<el-container>
+					<el-header style="text-align: right; font-size: 12px">
+						<el-dropdown>
+							<i class="el-icon-setting" style="margin-right: 15px"></i>
+							<el-dropdown-menu slot="dropdown">
+								<el-dropdown-item>退出登录</el-dropdown-item>
+							</el-dropdown-menu>
+						</el-dropdown>
+						<span>{{user.userName}}</span>
+					</el-header>
+
+					<el-main>
+						<!-- <el-table :data="tableData">
+							<el-table-column prop="date" label="日期" width="140">
+							</el-table-column>
+							<el-table-column prop="name" label="姓名" width="120">
+							</el-table-column>
+							<el-table-column prop="address" label="地址">
+							</el-table-column>
+						</el-table> -->
+						<iframe name="myFrame" width="100%" height="100%" border="1"
+							src="https://uland.taobao.com/sem/tbsearch?refpid=mm_26632360_8858797_29866178&keyword=%E5%A5%B3%E8%A3%85&clk1=64b8102464f846052c1fb412f9063ed8&upsId=64b8102464f846052c1fb412f9063ed8"></iframe>
+					</el-main>
+				</el-container>
+			</el-container>
+		</div>
+		<script>
+			new Vue({
+				el: "#app",
+				data: {
+					tableData: Array(12).fill({
+						date: '2016-05-02',
+						name: '王小虎',
+						address: '上海市普陀区金沙江路 1518 弄'
+					}),
+					user: {
+						userName: "dyj",
+						userPwd: ""
+					}
+				},
+				methods: {}
+			})
+		</script>
+	</body>
+</html>

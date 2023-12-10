@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>天气预报</title>
+		<script src="js/vue.js"></script>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script src="./js/axios.min.js"></script>
+		<!-- echarts.js用来生成图表的一个js文件 -->
+		<script src="./js/echarts.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 为 ECharts 准备一个定义了宽高的 DOM,这个容器用来显示图表 -->
+			<div id="main" style="width: 600px;height:400px;"></div>
+		</div>
+		<script>
+			new Vue({
+				el: "#app",
+				data: {
+					//weatherData:图表中所需要的数据，通过后端传入
+					/*
+					1.时间轴:周日 周一....  timeList
+					2.天气状态:小雨 晴....  weatherList
+					3.最高气温的列表:32 35 ... highList
+					4.最低气温的列表:23 25 ... lowList
+					*/
+					weatherData:[]
+				},
+				methods: {
+					//用来生成图表
+					updateChart: function() {
+						// 基于准备好的dom，初始化echarts实例
+						var myChart = echarts.init(document.getElementById('main'));
+						//
+						var timeList=this.weatherData.timeList;
+						var weatherList=this.weatherData.weatherList;
+						var highList=this.weatherData.highList;
+						var lowList=this.weatherData.lowList;
+						//图表数据
+						option = {
+							title: {
+								text: '全国城市天气预报'
+							},
+							tooltip: {
+								trigger: 'axis'
+							},
+							legend: {},
+							toolbox: {
+								show: true,
+								feature: {
+									dataZoom: {
+										yAxisIndex: 'none'
+									},
+									dataView: {
+										readOnly: false
+									},
+									magicType: {
+										type: ['line', 'bar']
+									},
+									restore: {},
+									saveAsImage: {}
+								}
+							},
+							// X轴：天气状态  时间
+							xAxis: [{
+								type: 'category',
+								boundaryGap: false,
+								//天气状态轴
+								data: weatherList
+							},{
+								type: 'category',
+								boundaryGap: false,
+								//时间轴
+								data: timeList
+							}],
+							// Y轴：温度
+							yAxis: {
+								type: 'value',
+								axisLabel: {
+									formatter: '{value} °C'
+								}
+							},
+							//图表数据
+							series: [{
+									name: '最高温',
+									type: 'line',
+									data: highList,
+									markPoint: {
+										data: [{
+												type: 'max',
+												name: 'Max'
+											},
+											{
+												type: 'min',
+												name: 'Min'
+											}
+										]
+									},
+									markLine: {
+										data: [{
+											type: 'average',
+											name: 'Avg'
+										}]
+									}
+								},
+								{
+									name: '最低温',
+									type: 'line',
+									data: lowList,
+									markPoint: {
+										data: [{
+											name: '周最低',
+											value: -2,
+											xAxis: 1,
+											yAxis: -1.5
+										}]
+									},
+									markLine: {
+										data: [{
+												type: 'average',
+												name: 'Avg'
+											},
+											[{
+													symbol: 'none',
+													x: '90%',
+													yAxis: 'max'
+												},
+												{
+													symbol: 'circle',
+													label: {
+														position: 'start',
+														formatter: 'Max'
+													},
+													type: 'max',
+													name: '最高点'
+												}
+											]
+										]
+									}
+								}
+							]
+						};
+						// 使用刚指定的配置项和数据显示图表。
+						myChart.setOption(option);
+					}
+				},
+				//页面加载完成后自动调用
+				mounted:function(){
+					//访问后端 axios  后端返回的数据 res.data
+					//将后端返回的数据给weatherData   this.weatherData=res.data
+					axios.get("http://localhost:9999/weather/echarts").then((res)=>{
+						this.weatherData=res.data;
+						this.updateChart();//填充数据
+					})
+				}
+			})
+		</script>
+	</body>
+</html>

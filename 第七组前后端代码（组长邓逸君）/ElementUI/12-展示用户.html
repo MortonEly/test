@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>表格数据显示</title>
+		<script src="./js/vue.js"></script>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<!-- 引入axios -->
+		<script src="./js/axios.min.js"></script>
+	</head>
+	<body>
+		<!-- .slice((currentpage-1)*pagesize,currentpage*pagesize) -->
+		<div id="app">
+			<el-table :data="tableData" style="width: 100%">
+				
+				<el-table-column prop="userId" label="用户ID" width="180"></el-table-column>
+				<el-table-column prop="userName" label="用户名" width="180"></el-table-column>
+				<el-table-column fixed="right" label="操作" width="120">
+					<template slot-scope="scope">
+						<!-- 
+							@click:点击事件 deleteRow
+							scope.$index:当前行(选中行)的索引
+							tableData:整张表的数据
+							scope.row:当前行的数据
+						 -->
+						<el-button @click.native.prevent="deleteRow(scope.$index, tableData,scope.row)" type="text" size="small">
+							删除
+						</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			
+			<el-pagination  background layout="prev, pager, next"
+			  :total="total"  @size-change="handleSizeChange"
+			  @current-change="handleCurrentChange"  :page-size="pagesize"  >
+			</el-pagination>
+			
+		</div>
+		<script>
+			new Vue({
+				el: "#app",
+				data: {
+					//数据总条数
+					total:0,
+					//每页显示的条数
+					pagesize:4,
+					//当前页码
+					currentpage:0,
+					
+					tableData: [],
+				},
+				methods: {
+					// 跨域问题:
+					show: function() {
+						//访问http://localhost:9999/book/list
+						//axios 
+						axios.post("http://localhost:9999/user/list").then((res) => {
+							this.tableData = res.data;
+							// 获得数据总条数
+							this.total=Object.keys(res.data).length;
+						})
+					},
+					deleteRow:function(index,data,row){
+						//http://localhost:9999/book/del?bookId=7
+						axios.get("http://localhost:9999/book/del",{
+							params:{
+								bookId:row.bookId
+							}
+						}).then((res)=>{
+							if (res.data.code==200) {
+								this.$message('删除成功!');
+								setTimeout(function(){
+									location.href="2-表格数据显示.html"
+								},500)
+							} else{
+								this.$message('删除失败!');
+							}					
+						})
+					},
+					// 当前页码改变时触发 val为事件触发时获得的值
+					handleCurrentChange:function(val){
+						//此时的val就是选择的的页码
+						this.currentpage=val;
+					},
+					//每条页数改变时会触发
+					handleSizeChange:function(val){
+						this.pagesize=val;
+					}
+				},
+				
+				created: function() {
+					//声明周期函数，数据自动加载
+					this.show();
+				}
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.weather.dao.BookMapper">
+
+<!--  让数据库表中的字段名与实体类中的属性名一一对应 映射  -->
+    <resultMap id="bookMap" type="book">
+        <id column="book_id" property="bookId"></id>
+        <result column="book_name" property="bookName"></result>
+        <result column="book_author" property="bookAuthor"></result>
+        <result column="book_price" property="bookPrice"></result>
+        <result column="book_desc" property="bookDesc"></result>
+    </resultMap>
+
+    <select id="findAll" resultMap="bookMap">
+        select * from bookinfo
+    </select>
+    <delete id="deleteById">
+        delete from bookinfo where book_id=#{bookId}
+    </delete>
+    <insert id="add">
+        insert into bookinfo values(null,#{bookName},#{bookAuthor},#{bookPrice},#{bookDesc})
+    </insert>
+    <update id="update">
+        update bookinfo set book_name=#{bookName},book_author=#{bookAuthor},book_price=#{bookPrice},book_desc=#{bookDesc} where book_id=#{bookId}
+    </update>
+</mapper>
